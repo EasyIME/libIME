@@ -32,6 +32,7 @@ DisplayAttributeInfoEnum::DisplayAttributeInfoEnum(DisplayAttributeProvider* pro
 }
 
 DisplayAttributeInfoEnum::DisplayAttributeInfoEnum(const DisplayAttributeInfoEnum& other):
+	refCount_(other.refCount_),
 	provider_(other.provider_),
 	iterator_(other.iterator_) {
 }
