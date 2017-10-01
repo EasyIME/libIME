@@ -28,7 +28,6 @@ namespace Ime {
 
 LangBarButton::LangBarButton(TextService* service, const GUID& guid, UINT commandId, const wchar_t* text, DWORD style):
 	textService_(service),
-	tooltip_(NULL),
 	commandId_(commandId),
 	menu_(NULL),
 	icon_(NULL),
