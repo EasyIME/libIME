@@ -113,13 +113,9 @@ static void loadDefaultUserRegistry(const wchar_t* defaultUserRegKey) {
 	// the HKEY_CURRENT_USER key of newly created users can also contain our settings.
 	// In order to do this, we need to load the default "hive" to registry first.
 	// Reference: https://msdn.microsoft.com/zh-tw/library/windows/desktop/ms724889(v=vs.85).aspx
-	wchar_t *userProfilesDir = nullptr;
-	if (SUCCEEDED(::SHGetKnownFolderPath(FOLDERID_UserProfiles, 0, NULL, &userProfilesDir))) {
-		// get the path of the default ntuser.dat file
-		std::wstring defaultRegFile = userProfilesDir;
-		::CoTaskMemFree(userProfilesDir);
-		defaultRegFile += L"\\Default User\\ntuser.dat";
-
+	wchar_t szHiveFile[MAX_PATH] = { 0 };
+	DWORD cchHiveFile = ARRAYSIZE(szHiveFile);
+	if (GetDefaultUserProfileDirectoryW(szHiveFile, &cchHiveFile) && PathAppendW(szHiveFile, L"ntuser.dat")) {
 		// loading registry file requires special privileges SE_RESTORE_NAME and SE_BACKUP_NAME.
 		// So let's do privilege elevation for our process.
 		HANDLE processToken = NULL;
@@ -136,7 +132,7 @@ static void loadDefaultUserRegistry(const wchar_t* defaultUserRegKey) {
 		::CloseHandle(processToken);
 
 		// load the default registry hive under the specified key name
-		::RegLoadKeyW(HKEY_USERS, defaultUserRegKey, defaultRegFile.c_str());
+		::RegLoadKeyW(HKEY_USERS, defaultUserRegKey, szHiveFile);
 	}
 }
 #endif  // #ifndef _WIN64
