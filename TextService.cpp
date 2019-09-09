@@ -25,7 +25,6 @@
 #include "ImeModule.h"
 
 #include <assert.h>
-#include <string>
 #include <algorithm>
 
 using namespace std;
