@@ -315,4 +315,4 @@ private:
 
 }
 
-#endif
+#endif  // IME_TEXT_SERVICE_H

@@ -62,3 +62,5 @@ add_library(libIME_static STATIC
 target_link_libraries(libIME_static
     shlwapi.lib
 )
+
+add_subdirectory(tests)
