@@ -154,10 +154,10 @@ public:
 	virtual void onSetFocus();
 	virtual void onKillFocus();
 
-	virtual bool filterKeyDown(KeyEvent& keyEvent);
+	virtual bool filterKeyDown(KeyEvent& keyEvent, EditSession* session);
 	virtual bool onKeyDown(KeyEvent& keyEvent, EditSession* session);
 	
-	virtual bool filterKeyUp(KeyEvent& keyEvent);
+	virtual bool filterKeyUp(KeyEvent& keyEvent, EditSession* session);
 	virtual bool onKeyUp(KeyEvent& keyEvent, EditSession* session);
 
 	virtual bool onPreservedKey(const GUID& guid);
@@ -240,14 +240,16 @@ protected:
 	// edit session classes, used with TSF
 	class KeyEditSession: public EditSession {
 	public:
-		KeyEditSession(TextService* service, ITfContext* context, KeyEvent& keyEvent):
+		KeyEditSession(TextService* service, ITfContext* context, KeyEvent& keyEvent, bool testOnly):
 			EditSession(service, context),
 			keyEvent_(keyEvent),
+			testOnly_(testOnly),
 			result_(false) {
 		}
 		STDMETHODIMP DoEditSession(TfEditCookie ec);
 
 		KeyEvent keyEvent_;
+		bool testOnly_;
 		bool result_;
 	};
 
@@ -267,7 +269,7 @@ protected:
 		STDMETHODIMP DoEditSession(TfEditCookie ec);
 	};
 
-	HRESULT doKeyEditSession(TfEditCookie cookie, KeyEditSession* session);
+	HRESULT doKeyEditSession(TfEditCookie cookie, KeyEditSession* session, bool testOnly);
 	HRESULT doStartCompositionEditSession(TfEditCookie cookie, StartCompositionEditSession* session);
 	HRESULT doEndCompositionEditSession(TfEditCookie cookie, EndCompositionEditSession* session);
 
